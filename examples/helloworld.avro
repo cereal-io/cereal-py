@@ -1,21 +1,21 @@
 [
     {
-        "name": "HelloRequest",
         "type": "record",
+        "name": "HelloRequest",
         "fields": [
             {
-                "name": "name",
-                "type": "String"
+                "type": "String",
+                "name": "name"
             }
         ]
     },
     {
-        "name": "HelloReply",
         "type": "record",
+        "name": "HelloReply",
         "fields": [
             {
-                "name": "message",
-                "type": "String"
+                "type": "String",
+                "name": "message"
             }
         ]
     }
