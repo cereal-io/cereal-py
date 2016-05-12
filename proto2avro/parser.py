@@ -5,6 +5,8 @@ import json
 import os
 import re
 
+from collections import OrderedDict
+
 # type definitions for .proto to Java
 types = {
     'double': 'double',
@@ -36,14 +38,13 @@ def parse(args):
             line = lines[i].strip()
             match = prog.match(line)
             if match:
-                record = {
-                    'type': 'record',
-                    'fields': [],
-                }
+                record = OrderedDict()
+                record['type'] = 'record'
                 # Google Protocol Buffer message name.
                 record['name'] = match.group(1)
+                record['fields'] = []
                 j = i
-                while not line.endswith('}'):
+                while True:
                     # Increment `j` by 1 to ignore the `message` line
                     # itself.
                     j += 1
@@ -66,7 +67,8 @@ def parse(args):
         if args.out:
             filepath = os.path.expanduser(args.out)
             with open(filepath, 'w') as fp:
-                context = json.dumps(schemas, indent=4)
+                context = json.dumps(schemas, indent=4,
+                                     separators=(',', ': '))
                 fp.write(context)
 
 if __name__ == '__main__':
