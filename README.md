@@ -1,6 +1,8 @@
+The purpose of this module is to convert [Google Protocol Buffer](https://developers.google.com/protocol-buffers/) files to [Apache Avro](https://avro.apache.org/) files. The following example demonstrates how to use the parser:
+
     $ python parser.py -f helloworld.proto --out helloworld.avro
 
-**helloworld.proto**
+Given that the input file is `helloworld.proto`:
 
 ```protobuf
 message HelloRequest {
@@ -12,7 +14,7 @@ message HelloReply {
 }
 ```
 
-**helloworld.avro**
+The output will be `helloworld.avro`:
 
 ```json
 [
