@@ -2,12 +2,13 @@
 
 import argparse
 import json
+import logging
 import os
 import re
 
 from collections import OrderedDict
 
-# type definitions for .proto to Java
+# Type definitions for .proto to Java
 types = {
     'double': 'double',
     'float': 'float',
@@ -58,6 +59,11 @@ def parse(args):
                     try:
                         t = types[t]
                     except KeyError:
+                        # If the type is unknown, display a warning with
+                        # the type and the line number.
+                        logging.warning(
+                            'got unexpected type {} [L{}]'.format(t, j + 1)
+                        )
                         continue
                     record['fields'].append({
                         'name': identifier,
@@ -69,7 +75,7 @@ def parse(args):
             with open(filepath, 'w') as fp:
                 context = json.dumps(schemas, indent=4,
                                      separators=(',', ': '))
-                fp.write(context)
+                fp.write(context + '\n')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=parse.__doc__)
