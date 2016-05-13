@@ -37,7 +37,7 @@ def parse(args):
         for i in range(len(lines)):
             line = lines[i].strip()
             match = prog.match(line)
-            if match:
+            if match is not None:
                 record = OrderedDict()
                 record['type'] = 'record'
                 # Google Protocol Buffer message name.
@@ -64,7 +64,7 @@ def parse(args):
                         'type': t,
                     })
                 schemas.append(record)
-        if args.out:
+        if args.out is not None:
             filepath = os.path.expanduser(args.out)
             with open(filepath, 'w') as fp:
                 context = json.dumps(schemas, indent=4,

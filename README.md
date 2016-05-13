@@ -1,3 +1,5 @@
+# Quickstart
+
 The purpose of this module is to convert [Google Protocol Buffer](https://developers.google.com/protocol-buffers/) files to [Apache Avro](https://avro.apache.org/) files. The following example demonstrates how to use the parser:
 
     $ python parser.py -f helloworld.proto --out helloworld.avro
