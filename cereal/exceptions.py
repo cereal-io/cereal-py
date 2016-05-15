@@ -1,0 +1,2 @@
+class UnknownExtensionError(Exception):
+    pass

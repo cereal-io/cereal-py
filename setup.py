@@ -1,11 +1,16 @@
-from distutils.core import setup
+from setuptools import setup
+from setuptools import find_packages
 
 setup(
-    name='proto2avro',
+    name='cereal',
     version='1.0',
     author='Jason Walsh',
     author_email='rightlag@gmail.com',
-    url='https://github.com/rightlag/proto2avro',
-    description='Convert Google Protocol Buffer files to Avro files',
-    license='MIT'
+    url='https://github.com/rightlag/cereal',
+    description='''
+        Convert Google Protocol Buffers, Apache Avro, and Apache Thrift
+        files to their counterparts.
+    ''',
+    license='MIT',
+    packages=find_packages()
 )
