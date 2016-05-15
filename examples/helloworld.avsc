@@ -4,7 +4,7 @@
         "name": "HelloRequest",
         "fields": [
             {
-                "type": "String",
+                "type": "string",
                 "name": "name"
             }
         ]
@@ -14,7 +14,7 @@
         "name": "HelloReply",
         "fields": [
             {
-                "type": "String",
+                "type": "string",
                 "name": "message"
             }
         ]

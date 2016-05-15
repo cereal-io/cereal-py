@@ -6,6 +6,25 @@ from meta import ProtocolMeta
 
 
 class Protobuf(ProtocolMeta):
+    # To Avro
+    PRIMITIVES = {
+        'double': 'double',
+        'float': 'float',
+        'int32': 'int',
+        'int64': 'long',
+        'uint32': 'int',
+        'uint64': 'long',
+        'sint32': 'int',
+        'sint64': 'long',
+        'fixed32': 'int',
+        'fixed64': 'long',
+        'sfixed32': 'int',
+        'sfixed64': 'long',
+        'bool': 'boolean',
+        'string': 'string',
+        'bytes': 'bytes',
+    }
+
     def __init__(self, filepath):
         super(Protobuf, self).__init__(filepath)
 
@@ -38,7 +57,7 @@ class Protobuf(ProtocolMeta):
                     field = line.split()
                     t, identifier = field[:2]
                     try:
-                        t = Avro.TYPES[t]
+                        t = self.PRIMITIVES[t]
                     except KeyError:
                         continue
                     record['fields'].append({
@@ -50,25 +69,17 @@ class Protobuf(ProtocolMeta):
 
 
 class Avro(ProtocolMeta):
-    TYPES = {
-        'double': 'double',
+    # To protobuf
+    PRIMITIVES = {
+        'null': None,
+        'boolean': 'bool',
+        'int': 'sint32',
+        'long': 'sint64',
         'float': 'float',
-        'int32': 'int',
-        'int64': 'long',
-        'uint32': 'int',
-        'uint64': 'long',
-        'sint32': 'int',
-        'sint64': 'long',
-        'fixed32': 'int',
-        'fixed64': 'long',
-        'sfixed32': 'int',
-        'sfixed64': 'long',
-        'bool': 'boolean',
-        'string': 'String',
-        'bytes': 'ByteString',
+        'double': 'double',
+        'bytes': 'bytes',
+        'string': 'string',
     }
-
-    REVERSED = dict({(v, k) for (k, v) in TYPES.iteritems()})
 
     def __init__(self, filepath):
         super(Avro, self).__init__(filepath)
@@ -85,7 +96,7 @@ class Avro(ProtocolMeta):
                 fields = records[i]['fields']
                 for i in range(len(fields)):
                     lines += ' ' * indent + '{} {} = {};\n'.format(
-                        self.REVERSED[fields[i]['type']],
+                        self.PRIMITIVES[fields[i]['type']],
                         fields[i]['name'],
                         i + 1,
                     )
