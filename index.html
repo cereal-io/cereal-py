@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>cereal-py by cereal-io</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>cereal-py</h1>
+        <p>Convert Google Protocol Buffers (.proto), Apache Avro (.avsc), and Apache Thrift (.thrift) files to their counterparts.</p>
+
+        <p class="view"><a href="https://github.com/cereal-io/cereal-py">View the Project on GitHub <small>cereal-io/cereal-py</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/cereal-io/cereal-py/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/cereal-io/cereal-py/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/cereal-io/cereal-py">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="cereal-py" class="anchor" href="#cereal-py" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>cereal-py</h1>
+
+<p>The purpose of this python module is to convert <a href="https://developers.google.com/protocol-buffers/">Google Protocol Buffer</a>,<a href="https://avro.apache.org/">Apache Avro</a>, and <a href="https://thrift.apache.org/">Apache Thrift</a> to their counterpart files. The following example demonstrates how to use the parser:</p>
+
+<pre><code>$ python parser.py -f helloworld.proto --out helloworld.avro
+</code></pre>
+
+<p>Given that the input file is <code>helloworld.proto</code>:</p>
+
+<div class="highlight highlight-source-protobuf"><pre><span class="pl-k">message</span> <span class="pl-en">HelloRequest</span> {
+  string name = 1;
+}
+
+<span class="pl-k">message</span> <span class="pl-en">HelloReply</span> {
+  string message = 1;
+}</pre></div>
+
+<p>The output will be <code>helloworld.avro</code>:</p>
+
+<div class="highlight highlight-source-json"><pre>[
+    {
+        <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>record<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>HelloRequest<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>fields<span class="pl-pds">"</span></span>: [
+            {
+                <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>String<span class="pl-pds">"</span></span>,
+                <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>
+            }
+        ]
+    },
+    {
+        <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>record<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>HelloReply<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>fields<span class="pl-pds">"</span></span>: [
+            {
+                <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>String<span class="pl-pds">"</span></span>,
+                <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span>
+            }
+        ]
+    }
+]</pre></div>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/cereal-io">cereal-io</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
