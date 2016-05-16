@@ -2,7 +2,7 @@ import json
 import re
 
 from collections import OrderedDict
-from meta import ProtocolMeta
+from .meta import ProtocolMeta
 
 
 class Protobuf(ProtocolMeta):
