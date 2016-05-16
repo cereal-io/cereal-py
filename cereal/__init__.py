@@ -1,8 +1,8 @@
 import re
 
-from parsers import Protobuf
-from parsers import Avro
-from exceptions import UnknownExtensionError
+from .parsers import Protobuf
+from .parsers import Avro
+from .exceptions import UnknownExtensionError
 
 
 def build(filepath):
