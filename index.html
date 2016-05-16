@@ -29,9 +29,15 @@
       </header>
       <section>
         <h1>
+<a id="cereal-py---" class="anchor" href="#cereal-py---" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>cereal-py <a href="https://travis-ci.org/cereal-io/cereal-py"><img src="https://img.shields.io/travis/cereal-io/cereal-py/master.svg?style=flat-square" alt="Build Status"></a> <img src="https://img.shields.io/github/tag/cereal-io/cereal-py.svg?style=flat-square&amp;label=version" alt="GitHub tag"> <img src="https://img.shields.io/badge/style-pep8-7bcdea.svg?style=flat-square" alt="GitHub tag">
+</h1>
+
+<p>The purpose of this module is to convert <a href="https://developers.google.com/protocol-buffers/">Google Protocol Buffer</a> files, <a href="https://avro.apache.org/">Apache Avro</a> files, and <a href="https://thrift.apache.org/">Apache Thrift</a> files to their counterparts.</p>
+
+<h1>
 <a id="quickstart" class="anchor" href="#quickstart" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Quickstart</h1>
 
-<p>The purpose of this module is to convert <a href="https://developers.google.com/protocol-buffers/">Google Protocol Buffer</a> files, <a href="https://avro.apache.org/">Apache Avro</a> files, and <a href="https://thrift.apache.org/">Apache Thrift</a> files to their counterparts. The following example demonstrates how to convert a Google Protocol Buffer file to an Apache Avro file:</p>
+<p>The following example demonstrates how to convert a Google Protocol Buffer file to an Apache Avro file:</p>
 
 <p>Given that the input file is <code>helloworld.proto</code>:</p>
 
@@ -45,14 +51,14 @@
 
 <div class="highlight highlight-source-python"><pre><span class="pl-k">&gt;&gt;</span><span class="pl-k">&gt;</span> <span class="pl-k">from</span> cereal <span class="pl-k">import</span> build
 <span class="pl-k">&gt;&gt;</span><span class="pl-k">&gt;</span> svc <span class="pl-k">=</span> build(<span class="pl-s"><span class="pl-pds">'</span>./examples/helloworld.proto<span class="pl-pds">'</span></span>)
-<span class="pl-k">&gt;&gt;</span><span class="pl-k">&gt;</span> <span class="pl-c1">print</span> svc.to_avro()
+<span class="pl-k">&gt;&gt;</span><span class="pl-k">&gt;</span> <span class="pl-c1">print</span>(svc.to_avro())
 [
     {
         <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>record<span class="pl-pds">"</span></span>,
         <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>HelloRequest<span class="pl-pds">"</span></span>,
         <span class="pl-s"><span class="pl-pds">"</span>fields<span class="pl-pds">"</span></span>: [
             {
-                <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>String<span class="pl-pds">"</span></span>,
+                <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>string<span class="pl-pds">"</span></span>,
                 <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>
             }
         ]
@@ -62,7 +68,7 @@
         <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>HelloReply<span class="pl-pds">"</span></span>,
         <span class="pl-s"><span class="pl-pds">"</span>fields<span class="pl-pds">"</span></span>: [
             {
-                <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>String<span class="pl-pds">"</span></span>,
+                <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>string<span class="pl-pds">"</span></span>,
                 <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>message<span class="pl-pds">"</span></span>
             }
         ]
@@ -75,7 +81,7 @@
 
 <div class="highlight highlight-source-python"><pre><span class="pl-k">&gt;&gt;</span><span class="pl-k">&gt;</span> <span class="pl-k">from</span> cereal <span class="pl-k">import</span> build
 <span class="pl-k">&gt;&gt;</span><span class="pl-k">&gt;</span> svc <span class="pl-k">=</span> build(<span class="pl-s"><span class="pl-pds">'</span>./examples/helloworld.avsc<span class="pl-pds">'</span></span>)
-<span class="pl-k">&gt;&gt;</span><span class="pl-k">&gt;</span> <span class="pl-c1">print</span> svc.to_protobuf()
+<span class="pl-k">&gt;&gt;</span><span class="pl-k">&gt;</span> <span class="pl-c1">print</span>(svc.to_protobuf())
 message HelloRequest {
     string name = <span class="pl-c1">1</span>;
 }
