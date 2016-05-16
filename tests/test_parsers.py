@@ -5,6 +5,7 @@ import json
 
 from cereal import build
 
+
 class ProtobufTestCase(unittest.TestCase):
     def setUp(self):
         self.svc = build('./examples/helloworld.proto')
@@ -15,8 +16,10 @@ class ProtobufTestCase(unittest.TestCase):
         actual = json.loads(self.svc.to_avro())
         self.assertEqual(actual, expected)
 
+
 class AvroTestCase(unittest.TestCase):
     pass
+
 
 class ThriftTestCase(unittest.TestCase):
     pass

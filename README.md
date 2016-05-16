@@ -17,14 +17,14 @@ message HelloReply {
 ```python
 >>> from cereal import build
 >>> svc = build('./examples/helloworld.proto')
->>> print svc.to_avro()
+>>> print(svc.to_avro())
 [
     {
         "type": "record",
         "name": "HelloRequest",
         "fields": [
             {
-                "type": "String",
+                "type": "string",
                 "name": "name"
             }
         ]
@@ -34,7 +34,7 @@ message HelloReply {
         "name": "HelloReply",
         "fields": [
             {
-                "type": "String",
+                "type": "string",
                 "name": "message"
             }
         ]
@@ -49,7 +49,7 @@ Converting a `.avsc` file to a `.proto` file uses a similar process:
 ```python
 >>> from cereal import build
 >>> svc = build('./examples/helloworld.avsc')
->>> print svc.to_protobuf()
+>>> print(svc.to_protobuf())
 message HelloRequest {
     string name = 1;
 }
