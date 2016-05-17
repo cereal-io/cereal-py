@@ -2,7 +2,7 @@ import json
 import re
 
 from collections import OrderedDict
-from .meta import ProtocolMeta
+from ..meta import ProtocolMeta
 
 
 class Protobuf(ProtocolMeta):
@@ -25,15 +25,12 @@ class Protobuf(ProtocolMeta):
         'bytes': 'bytes',
     }
 
-    FIELD = r'^(?P<rule>\w+)?(?:^|\s)(?P<type>\w+)(?:^|\s)(?P<identifier>\w+)\s=\s(?P<varint>\d+);$'
-
     def __init__(self, filepath):
         super(Protobuf, self).__init__(filepath)
-        prog = re.compile(r'syntax\s=\s\"(proto\d+)\";')
         with open(self._filepath) as fp:
-            match = prog.search(fp.read())
+            match = re.search(self._patterns['syntax'], fp.read())
         if match is not None:
-            syntax = match.group(1)
+            syntax = match.group('syntax')
         else:
             syntax = 'proto2'
         self._syntax = syntax
@@ -47,16 +44,15 @@ class Protobuf(ProtocolMeta):
         schemas = []
         with open(self._filepath) as fp:
             lines = fp.readlines()
-        prog = re.compile(r'^message\s(\w+)\s\{$')
         for i in range(len(lines)):
             line = lines[i].strip()
-            match = prog.match(line)
+            match = re.match(self._patterns['message'], line)
             if match is None:
                 continue
             record = OrderedDict()
             record['type'] = 'record'
             # Google Protocol Buffer message name.
-            record['name'] = match.group(1)
+            record['name'] = match.group('name')
             record['fields'] = []
             j = i
             while True:
@@ -68,7 +64,7 @@ class Protobuf(ProtocolMeta):
                     break
                 if line == '':
                     continue
-                match = re.match(self.FIELD, line)
+                match = re.match(self._patterns['field'], line)
                 if match is None:
                     continue
                 rule, t, identifier, _ = match.groups()
@@ -82,40 +78,3 @@ class Protobuf(ProtocolMeta):
                 })
             schemas.append(record)
         return json.dumps(schemas, indent=indent)
-
-
-class Avro(ProtocolMeta):
-    # To protobuf
-    PRIMITIVES = {
-        'null': None,
-        'boolean': 'bool',
-        'int': 'sint32',
-        'long': 'sint64',
-        'float': 'float',
-        'double': 'double',
-        'bytes': 'bytes',
-        'string': 'string',
-    }
-
-    def __init__(self, filepath):
-        super(Avro, self).__init__(filepath)
-
-    def to_protobuf(self, indent=4):
-        lines = ''
-        with open(self._filepath) as fp:
-            records = json.loads(fp.read())
-        first = 0
-        last = len(records) - 1
-        for i in range(len(records)):
-            lines += '\n' if i != first else ''
-            lines += 'message {}'.format(records[i]['name'])
-            lines += ' {\n'
-            fields = records[i]['fields']
-            for j in range(len(fields)):
-                lines += ' ' * indent + '{} {} = {};\n'.format(
-                    self.PRIMITIVES[fields[j]['type']],
-                    fields[j]['name'],
-                    j + 1,
-                )
-            lines += '}' if i == last else '}\n'
-        return lines

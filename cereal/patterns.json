@@ -1,0 +1,7 @@
+{
+    "protobuf": {
+        "syntax": "syntax\\s=\\s\"(?P<syntax>proto\\d+)\";",
+        "message": "^message\\s(?P<name>\\w+)\\s\\{$",
+        "field": "^(?P<rule>\\w+)?(?:^|\\s)(?P<type>\\w+)(?:^|\\s)(?P<identifier>\\w+)\\s=\\s(?P<varint>\\d+);$"
+    }
+}

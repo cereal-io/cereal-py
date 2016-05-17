@@ -1,7 +1,7 @@
 import re
 
-from .parsers import Protobuf
-from .parsers import Avro
+from .protobuf.parser import Protobuf
+from .avro.parser import Avro
 from .exceptions import UnknownExtensionError
 
 
