@@ -25,6 +25,8 @@ class Protobuf(ProtocolMeta):
         'bytes': 'bytes',
     }
 
+    FIELD = r'^(?P<rule>\w+)?(?:^|\s)(?P<type>\w+)(?:^|\s)(?P<identifier>\w+)\s=\s(?P<varint>\d+);$'
+
     def __init__(self, filepath):
         super(Protobuf, self).__init__(filepath)
         prog = re.compile(r'syntax\s=\s\"(proto\d+)\";')
@@ -66,8 +68,10 @@ class Protobuf(ProtocolMeta):
                     break
                 if line == '':
                     continue
-                field = line.split()
-                t, identifier = field[:2]
+                match = re.match(self.FIELD, line)
+                if match is None:
+                    continue
+                rule, t, identifier, _ = match.groups()
                 try:
                     t = self.PRIMITIVES[t]
                 except KeyError:
