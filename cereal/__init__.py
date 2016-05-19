@@ -6,14 +6,14 @@ from .exceptions import UnknownExtensionError
 
 
 def build(filepath):
-    prog = re.compile(r'^.*\.(\w+)$')
-    match = prog.match(filepath)
-    if match is not None:
-        extension = match.group(1)
-        try:
-            return {
-                'proto': Protobuf(filepath),
-                'avsc': Avro(filepath),
-            }[extension]
-        except KeyError:
-            raise UnknownExtensionError(extension)
+    match = re.match(r'^.*\.(?P<extension>\w+)$', filepath)
+    if match is None:
+        return
+    extension = match.group('extension')
+    try:
+        return {
+            'proto': Protobuf(filepath),
+            'avsc': Avro(filepath),
+        }[extension]
+    except KeyError:
+        raise UnknownExtensionError(extension)

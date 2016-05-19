@@ -11,7 +11,8 @@ class ProtocolMeta(object):
         try:
             # Try to load the associated patterns key/value pair based
             # on the lowercased class name.
-            patterns = context[self.__class__.__name__.lower()]
+            key = self.__class__.__name__.lower()
+            patterns = context[key]
         except KeyError:
             patterns = {}
         self._patterns = patterns
@@ -19,9 +20,3 @@ class ProtocolMeta(object):
     @property
     def patterns(self):
         return self._patterns
-
-    def __repr__(self):
-        if self.__class__.__name__.lower() == 'protobuf':
-            return '<{}:{}>'.format(self.__class__.__name__, self._syntax)
-        else:
-            return '<{}>'.format(self.__class__.__name__)

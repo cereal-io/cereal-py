@@ -30,7 +30,7 @@ class Protobuf(ProtocolMeta):
         with open(self._filepath) as fp:
             match = re.search(self._patterns['syntax'], fp.read())
         if match is not None:
-            syntax = match.group('syntax')
+            syntax = 'proto{}'.format(match.group('syntax'))
         else:
             syntax = 'proto2'
         self._syntax = syntax
@@ -44,8 +44,9 @@ class Protobuf(ProtocolMeta):
         schemas = []
         with open(self._filepath) as fp:
             lines = fp.readlines()
-        for i in range(len(lines)):
-            line = lines[i].strip()
+        start = 0
+        for i, line in enumerate(lines[start:]):
+            line = line.strip()
             match = re.match(self._patterns['message'], line)
             if match is None:
                 continue
@@ -54,27 +55,56 @@ class Protobuf(ProtocolMeta):
             # Google Protocol Buffer message name.
             record['name'] = match.group('name')
             record['fields'] = []
+            enumerations = {}
             j = i
             while True:
                 # Increment `j` by 1 to ignore the `message` line
                 # itself.
                 j += 1
                 line = lines[j].strip()
+                match = re.match(self._patterns['enumeration'], line)
+                if match is not None:
+                    # Detected an enumeration type.
+                    identifier = match.group(1)
+                    enumerations[identifier] = OrderedDict()
+                    enumerations[identifier]['type'] = 'enum'
+                    enumerations[identifier]['name'] = match.group(1)
+                    enumerations[identifier]['symbols'] = []
+                    while True:
+                        j += 1
+                        line = lines[j].strip()
+                        if line.endswith('}'):
+                            j += 1
+                            break
+                        symbols = line.split()
+                        enumerations[identifier]['symbols'].append(symbols[0])
+                line = lines[j].strip()
                 if line.endswith('}'):
+                    start = j
                     break
                 if line == '':
                     continue
                 match = re.match(self._patterns['field'], line)
                 if match is None:
+                    # Could not match field - continue to the next line.
                     continue
                 rule, t, identifier, _ = match.groups()
                 try:
                     t = self.PRIMITIVES[t]
+                    field = {
+                        'name': identifier,
+                        'type': t,
+                    }
                 except KeyError:
-                    continue
-                record['fields'].append({
-                    'name': identifier,
-                    'type': t,
-                })
+                    # Search `enumerations` for type. If the enumeration
+                    # exits, then append it to the `schemas` object.
+                    try:
+                        enumeration = enumerations[t]
+                        field = enumeration
+                    except KeyError:
+                        # The enumeration type was not found, therefore,
+                        # continue parsing the remainder of the lines.
+                        continue
+                record['fields'].append(field)
             schemas.append(record)
         return json.dumps(schemas, indent=indent)
