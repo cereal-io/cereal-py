@@ -89,6 +89,67 @@ message HelloRequest {
 message HelloReply {
     string message = <span class="pl-c1">1</span>;
 }</pre></div>
+
+<h1>
+<a id="protocol-buffers-enumerated-types" class="anchor" href="#protocol-buffers-enumerated-types" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Protocol Buffers Enumerated Types</h1>
+
+<p>Given the following protocol buffer message:</p>
+
+<div class="highlight highlight-source-protobuf"><pre><span class="pl-c">// search.proto</span>
+<span class="pl-k">message</span> <span class="pl-en">SearchRequest</span> {
+  string query = 1;
+  int32 page_number = 2;
+  int32 result_per_page = 3;
+  <span class="pl-k">enum</span> <span class="pl-en">Corpus</span> {
+    <span class="pl-c1">UNIVERSAL</span> = <span class="pl-c1">0</span>;
+    <span class="pl-c1">WEB</span> = <span class="pl-c1">1</span>;
+    <span class="pl-c1">IMAGES</span> = <span class="pl-c1">2</span>;
+    <span class="pl-c1">LOCAL</span> = <span class="pl-c1">3</span>;
+    <span class="pl-c1">NEWS</span> = <span class="pl-c1">4</span>;
+    <span class="pl-c1">PRODUCTS</span> = <span class="pl-c1">5</span>;
+    <span class="pl-c1">VIDEO</span> = <span class="pl-c1">6</span>;
+  }
+  Corpus corpus = 4;
+}</pre></div>
+
+<p><code>cereal</code> converts enumerated types into the format defined in the <a href="https://avro.apache.org/docs/current/spec.html#Enums">Avro specification</a>:</p>
+
+<div class="highlight highlight-source-python"><pre><span class="pl-k">&gt;&gt;</span><span class="pl-k">&gt;</span> <span class="pl-k">from</span> cereal <span class="pl-k">import</span> build
+<span class="pl-k">&gt;&gt;</span><span class="pl-k">&gt;</span> svc <span class="pl-k">=</span> build(<span class="pl-s"><span class="pl-pds">'</span>./examples/search.proto<span class="pl-pds">'</span></span>)
+<span class="pl-k">&gt;&gt;</span><span class="pl-k">&gt;</span> <span class="pl-c1">print</span>(svc.to_avro())
+[
+    {
+        <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>record<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>SearchRequest<span class="pl-pds">"</span></span>,
+        <span class="pl-s"><span class="pl-pds">"</span>fields<span class="pl-pds">"</span></span>: [
+            {
+                <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>string<span class="pl-pds">"</span></span>,
+                <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>query<span class="pl-pds">"</span></span>
+            },
+            {
+                <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>int<span class="pl-pds">"</span></span>,
+                <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>page_number<span class="pl-pds">"</span></span>
+            },
+            {
+                <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>int<span class="pl-pds">"</span></span>,
+                <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>result_per_page<span class="pl-pds">"</span></span>
+            },
+            {
+                <span class="pl-s"><span class="pl-pds">"</span>type<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>enum<span class="pl-pds">"</span></span>,
+                <span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>: <span class="pl-s"><span class="pl-pds">"</span>Corpus<span class="pl-pds">"</span></span>,
+                <span class="pl-s"><span class="pl-pds">"</span>symbols<span class="pl-pds">"</span></span>: [
+                    <span class="pl-s"><span class="pl-pds">"</span>UNIVERSAL<span class="pl-pds">"</span></span>,
+                    <span class="pl-s"><span class="pl-pds">"</span>WEB<span class="pl-pds">"</span></span>,
+                    <span class="pl-s"><span class="pl-pds">"</span>IMAGES<span class="pl-pds">"</span></span>,
+                    <span class="pl-s"><span class="pl-pds">"</span>LOCAL<span class="pl-pds">"</span></span>,
+                    <span class="pl-s"><span class="pl-pds">"</span>NEWS<span class="pl-pds">"</span></span>,
+                    <span class="pl-s"><span class="pl-pds">"</span>PRODUCTS<span class="pl-pds">"</span></span>,
+                    <span class="pl-s"><span class="pl-pds">"</span>VIDEO<span class="pl-pds">"</span></span>
+                ]
+            }
+        ]
+    }
+]</pre></div>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/cereal-io">cereal-io</a></p>
