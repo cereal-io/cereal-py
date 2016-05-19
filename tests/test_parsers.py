@@ -1,4 +1,4 @@
-"""Tests for parser.py"""
+"""Tests for various parsers."""
 
 import unittest
 import json
@@ -18,7 +18,22 @@ class ProtobufTestCase(unittest.TestCase):
 
 
 class AvroTestCase(unittest.TestCase):
-    pass
+    def setUp(self):
+        self.svc = build('./examples/helloworld.avsc')
+
+    def test_to_protobuf(self):
+        expected = """
+message HelloRequest {
+    string name = 1;
+}
+
+message HelloReply {
+    string message = 1;
+}
+        """
+        expected = expected.strip()
+        actual = self.svc.to_protobuf(syntax='proto2')
+        self.assertEqual(expected, actual)
 
 
 class ThriftTestCase(unittest.TestCase):
