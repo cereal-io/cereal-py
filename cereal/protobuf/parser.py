@@ -71,9 +71,12 @@ class Protobuf(ProtocolMeta):
                     enumerations[identifier]['name'] = match.group(1)
                     enumerations[identifier]['symbols'] = []
                     while True:
+                        # Omit `enum` field declaration.
                         j += 1
                         line = lines[j].strip()
                         if line.endswith('}'):
+                            # Omit ending curly brace of enumerated
+                            # type.
                             j += 1
                             break
                         symbols = line.split()

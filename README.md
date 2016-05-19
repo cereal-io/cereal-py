@@ -62,3 +62,67 @@ message HelloReply {
     string message = 1;
 }
 ```
+
+# Protocol Buffers Enumerated Types
+
+Given the following protocol buffer message:
+
+```protobuf
+// search.proto
+message SearchRequest {
+  string query = 1;
+  int32 page_number = 2;
+  int32 result_per_page = 3;
+  enum Corpus {
+    UNIVERSAL = 0;
+    WEB = 1;
+    IMAGES = 2;
+    LOCAL = 3;
+    NEWS = 4;
+    PRODUCTS = 5;
+    VIDEO = 6;
+  }
+  Corpus corpus = 4;
+}
+```
+
+`cereal` converts enumerated types into the format defined in the [Avro specification](https://avro.apache.org/docs/current/spec.html#Enums):
+
+```python
+>>> from cereal import build
+>>> svc = build('./examples/search.proto')
+>>> print(svc.to_avro())
+[
+    {
+        "type": "record",
+        "name": "SearchRequest",
+        "fields": [
+            {
+                "type": "string",
+                "name": "query"
+            },
+            {
+                "type": "int",
+                "name": "page_number"
+            },
+            {
+                "type": "int",
+                "name": "result_per_page"
+            },
+            {
+                "type": "enum",
+                "name": "Corpus",
+                "symbols": [
+                    "UNIVERSAL",
+                    "WEB",
+                    "IMAGES",
+                    "LOCAL",
+                    "NEWS",
+                    "PRODUCTS",
+                    "VIDEO"
+                ]
+            }
+        ]
+    }
+]
+```
