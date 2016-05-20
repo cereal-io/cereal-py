@@ -25,7 +25,7 @@ message HelloReply {
         self.assertEqual(expected, actual)
 
     def test_to_protobuf_with_enumerated_types(self):
-        svc = build('./tests/mocks/search.proto')
+        svc = build('./tests/avro/mocks/search.proto')
         expected = [
             {
                 'type': 'record',
