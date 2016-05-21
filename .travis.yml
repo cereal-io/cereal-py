@@ -17,4 +17,4 @@ script:
   - tox -e $TOX_ENV
 
 after_success:
-  - coverall
+  - coveralls
