@@ -100,7 +100,7 @@ class Protobuf(ProtocolMeta):
                     }
                 except KeyError:
                     # Search `enumerations` for type. If the enumeration
-                    # exits, then append it to the `schemas` object.
+                    # exists, then append it to the `schemas` object.
                     try:
                         enumeration = enumerations[t]
                         field = enumeration

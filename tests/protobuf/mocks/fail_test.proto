@@ -1,0 +1,4 @@
+// This mock Protobuf file intentionally
+// contains bad properties to fail cases
+
+syntax = "test_fail"
