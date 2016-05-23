@@ -4,5 +4,11 @@
         "message": "^message\\s(?P<name>\\w+)\\s\\{$",
         "field": "^(?P<rule>\\w+)?(?:^|\\s)(?P<type>\\w+)(?:^|\\s)(?P<identifier>\\w+)\\s=\\s(?P<varint>\\d+);$",
         "enumeration": "^enum\\s(\\w+)\\s\\{$"
+    },
+    "thrift": {
+        "typedef": "^typedef\\s(\\w+)\\s(\\w+)$",
+        "enumeration": "^enum\\s*(\\w+)\\s*\\{$",
+        "struct": "^struct\\s*(\\w+)\\s*\\{$",
+        "field": "^(\\d+)\\:\\s*(\\w+)\\s*(\\w+)$"
     }
 }

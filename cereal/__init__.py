@@ -1,7 +1,8 @@
 import re
 
-from .protobuf.parser import Protobuf
 from .avro.parser import Avro
+from .protobuf.parser import Protobuf
+from .thrift.parser import Thrift
 from .exceptions import UnknownExtensionError
 
 
@@ -14,6 +15,7 @@ def build(filepath):
         return {
             'proto': Protobuf(filepath),
             'avsc': Avro(filepath),
+            'thrift': Thrift(filepath),
         }[extension]
     except KeyError:
         raise UnknownExtensionError(extension)

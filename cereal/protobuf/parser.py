@@ -2,29 +2,12 @@ import json
 import re
 
 from collections import OrderedDict
+from primitives import _AVRO
+from primitives import _THRIFT
 from ..meta import ProtocolMeta
 
 
 class Protobuf(ProtocolMeta):
-    # To Avro
-    PRIMITIVES = {
-        'double': 'double',
-        'float': 'float',
-        'int32': 'int',
-        'int64': 'long',
-        'uint32': 'int',
-        'uint64': 'long',
-        'sint32': 'int',
-        'sint64': 'long',
-        'fixed32': 'int',
-        'fixed64': 'long',
-        'sfixed32': 'int',
-        'sfixed64': 'long',
-        'bool': 'boolean',
-        'string': 'string',
-        'bytes': 'bytes',
-    }
-
     def __init__(self, filepath):
         super(Protobuf, self).__init__(filepath)
         with open(self._filepath) as fp:
@@ -93,7 +76,7 @@ class Protobuf(ProtocolMeta):
                     continue
                 rule, t, identifier, _ = match.groups()
                 try:
-                    t = self.PRIMITIVES[t]
+                    t = _AVRO[t]
                     field = {
                         'name': identifier,
                         'type': t,
