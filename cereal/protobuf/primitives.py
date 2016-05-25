@@ -17,11 +17,19 @@ _AVRO = {
 }
 
 _THRIFT = {
-    'bool': 'bool',
-    'fixed64': 'byte',
+    'double': 'double',
+    'float': 'double',
     'int32': 'i32',
     'int64': 'i64',
-    'double': 'double',
+    'uint32': 'i32',
+    'uint64': 'i64',
+    'sint32': 'i32',
+    'sint64': 'i64',
+    'fixed32': 'i32',
+    'fixed64': 'i64',
+    'sfixed32': 'i32',
+    'sfixed64': 'i64',
+    'bool': 'bool',
     'string': 'string',
     'bytes': 'binary',
 }

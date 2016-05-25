@@ -1,15 +1,15 @@
 import re
 
 from collections import OrderedDict
-from primitives import _PROTOBUF
-from ..meta import ProtocolMeta
+from .primitives import _PROTOBUF
+from ..meta import FormatMeta
 
 
-class Thrift(ProtocolMeta):
+class Thrift(FormatMeta):
     def __init__(self, filepath):
         super(Thrift, self).__init__(filepath)
 
-    def to_protobuf(self, indent=4):
+    def to_protobuf(self, serialized=False, indent=4):
         """Convert an Apache Thrift file to a Google Protocol Buffer
         file."""
         with open(self._filepath) as fp:
@@ -22,7 +22,7 @@ class Thrift(ProtocolMeta):
             if match is None:
                 continue
             message = OrderedDict()
-            message['identifier'] = match.group(1)
+            message['identifier'] = match.group('struct')
             message['fields'] = []
             j = i
             while not line.endswith('}'):
@@ -45,15 +45,6 @@ class Thrift(ProtocolMeta):
                 }
                 message['fields'].append(field)
             messages.append(message)
-        context = ''
-        for message in messages:
-            context += 'message {}'.format(message['identifier'])
-            context += ' {\n'
-            for field in message['fields']:
-                context += ' ' * indent + (
-                    '{field[type]} {field[name]} = {field[identifier]}'
-                    .format(field=field)
-                )
-                context += '\n'
-            context += '}\n'
-        return context
+        if serialized:
+            return self._writer.write(messages, indent, fmt=self.PROTOBUF)
+        return messages

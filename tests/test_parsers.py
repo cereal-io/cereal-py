@@ -13,7 +13,7 @@ class ProtobufTestCase(unittest.TestCase):
     def test_to_avro(self):
         with open('./examples/helloworld.avsc') as fp:
             expected = json.loads(fp.read())
-        actual = json.loads(self.svc.to_avro())
+        actual = self.svc.to_avro()
         self.assertEqual(actual, expected)
 
 
@@ -32,7 +32,7 @@ message HelloReply {
 }
         """
         expected = expected.strip()
-        actual = self.svc.to_protobuf(syntax='proto2')
+        actual = self.svc.to_protobuf(serialized=True)
         self.assertEqual(expected, actual)
 
 

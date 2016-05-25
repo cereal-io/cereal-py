@@ -13,8 +13,8 @@ def build(filepath):
     extension = match.group('extension')
     try:
         return {
-            'proto': Protobuf(filepath),
             'avsc': Avro(filepath),
+            'proto': Protobuf(filepath),
             'thrift': Thrift(filepath),
         }[extension]
     except KeyError:

@@ -21,7 +21,7 @@ message HelloReply {
 ```python
 >>> from cereal import build
 >>> svc = build('./examples/helloworld.proto')
->>> print(svc.to_avro())
+>>> print(svc.to_avro(serialized=True))
 [
     {
         "type": "record",
@@ -53,7 +53,7 @@ Converting a `.avsc` file to a `.proto` file uses a similar process:
 ```python
 >>> from cereal import build
 >>> svc = build('./examples/helloworld.avsc')
->>> print(svc.to_protobuf())
+>>> print(svc.to_protobuf(serialized=True))
 message HelloRequest {
     string name = 1;
 }
@@ -91,7 +91,7 @@ message SearchRequest {
 ```python
 >>> from cereal import build
 >>> svc = build('./examples/search.proto')
->>> print(svc.to_avro())
+>>> print(svc.to_avro(serialized=True))
 [
     {
         "type": "record",

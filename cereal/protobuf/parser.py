@@ -2,12 +2,12 @@ import json
 import re
 
 from collections import OrderedDict
-from primitives import _AVRO
-from primitives import _THRIFT
-from ..meta import ProtocolMeta
+from .primitives import _AVRO
+from .primitives import _THRIFT
+from ..meta import FormatMeta
 
 
-class Protobuf(ProtocolMeta):
+class Protobuf(FormatMeta):
     def __init__(self, filepath):
         super(Protobuf, self).__init__(filepath)
         with open(self._filepath) as fp:
@@ -22,13 +22,12 @@ class Protobuf(ProtocolMeta):
     def syntax(self):
         return self._syntax
 
-    def to_avro(self, indent=4):
+    def to_avro(self, serialized=False, indent=4):
         """Convert a Google Protocol Buffer file to an Apache Avro file."""
-        schemas = []
         with open(self._filepath) as fp:
             lines = fp.readlines()
-        start = 0
-        for i, line in enumerate(lines[start:]):
+        schemas = []
+        for i, line in enumerate(lines):
             line = line.strip()
             match = re.match(self._patterns['message'], line)
             if match is None:
@@ -48,10 +47,10 @@ class Protobuf(ProtocolMeta):
                 match = re.match(self._patterns['enumeration'], line)
                 if match is not None:
                     # Detected an enumeration type.
-                    identifier = match.group(1)
+                    identifier = match.group('enumeration')
                     enumerations[identifier] = OrderedDict()
                     enumerations[identifier]['type'] = 'enum'
-                    enumerations[identifier]['name'] = match.group(1)
+                    enumerations[identifier]['name'] = identifier
                     enumerations[identifier]['symbols'] = []
                     while True:
                         # Omit `enum` field declaration.
@@ -66,7 +65,6 @@ class Protobuf(ProtocolMeta):
                         enumerations[identifier]['symbols'].append(symbols[0])
                 line = lines[j].strip()
                 if line.endswith('}'):
-                    start = j
                     break
                 if line == '':
                     continue
@@ -93,4 +91,6 @@ class Protobuf(ProtocolMeta):
                         continue
                 record['fields'].append(field)
             schemas.append(record)
-        return json.dumps(schemas, indent=indent)
+        if serialized:
+            return json.dumps(schemas, indent=indent)
+        return schemas
