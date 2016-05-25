@@ -1,8 +1,5 @@
 import json
-import re
 
-from collections import OrderedDict
-from .primitives import _TO_PROTOBUF
 from ..meta import FormatMeta
 
 

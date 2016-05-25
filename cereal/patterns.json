@@ -1,6 +1,6 @@
 {
     "protobuf": {
-        "syntax": "syntax\\s=\\s\"proto(?P<syntax>\\d+)\";",
+        "syntax": "syntax\\s*=\\s*\"proto(?P<syntax>\\d+)\";",
         "message": "^message\\s(?P<name>\\w+)\\s\\{$",
         "field": "^(?P<rule>\\w+)?(?:^|\\s)(?P<type>\\w+)(?:^|\\s)(?P<identifier>\\w+)\\s=\\s(?P<varint>\\d+);$",
         "enumeration": "^enum\\s(?P<enumeration>\\w+)\\s\\{$"

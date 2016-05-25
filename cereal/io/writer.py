@@ -1,9 +1,11 @@
 class Writer(object):
     """Agnostic class used to generate standard output from any format."""
     def write(self, objects, indent, fmt=None):
-        return {
+        # Retrieve the private method based on the format type.
+        fn = {
             'protobuf': self._to_protobuf
-        }[fmt](objects, indent)
+        }[fmt]
+        return fn(objects, indent)
 
     def _to_protobuf(self, objects, indent):
         """Return serialized protocol buffers."""
@@ -13,19 +15,17 @@ class Writer(object):
         for i, object in enumerate(objects):
             lines += '\n' if i != first else ''
             # The `message` name can either be indexed via the `name`
-            # key or the `identifier` depending on the object type.
-            try:
-                message = object['name']
-            except KeyError:
-                message = object['identifier']
-            lines += 'message {}'.format(message)
-            lines += ' {\n'
+            # key OR the `identifier` depending on the object type.
+            message = object.get('name') or object.get('identifier')
+            lines += 'message {} {{'.format(message)
+            lines += ' \n'
             fields = object['fields']
             for j, field in enumerate(fields):
                 identifier = field.get('identifier', j + 1)
                 lines += ' ' * indent + (
-                    '{field[type]} {field[name]} = {identifier};\n'
+                    '{field[type]} {field[name]} = {identifier};'
                     .format(field=field, identifier=identifier)
                 )
+                lines += '\n'
             lines += '}\n' if i != last else '}'
         return lines
