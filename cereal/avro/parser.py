@@ -1,5 +1,3 @@
-import json
-
 from ..meta import FormatMeta
 
 
@@ -8,8 +6,7 @@ class Avro(FormatMeta):
         super(Avro, self).__init__(filepath)
 
     def to_protobuf(self, serialized=False, indent=4):
-        with open(self._filepath) as fp:
-            records = json.loads(fp.read())
+        records = self._reader.read(self._filepath, to=self.PROTOBUF)
         if serialized:
             return self._writer.write(records, indent, fmt=self.PROTOBUF)
         return records

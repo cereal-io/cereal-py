@@ -1,11 +1,19 @@
+import json
+
+
 class Writer(object):
     """Agnostic class used to generate standard output from any format."""
-    def write(self, objects, indent, fmt=None):
+    def write(self, objects, indent, fmt=None, **kwargs):
         # Retrieve the private method based on the format type.
         fn = {
-            'protobuf': self._to_protobuf
+            'avro': self._to_avro,
+            'protobuf': self._to_protobuf,
+            'thrift': self._to_thrift,
         }[fmt]
         return fn(objects, indent)
+
+    def _to_avro(self, objects, indent):
+        return json.dumps(objects, indent=indent)
 
     def _to_protobuf(self, objects, indent):
         """Return serialized protocol buffers."""
@@ -18,7 +26,7 @@ class Writer(object):
             # key OR the `identifier` depending on the object type.
             message = object.get('name') or object.get('identifier')
             lines += 'message {} {{'.format(message)
-            lines += ' \n'
+            lines += '\n'
             fields = object['fields']
             for j, field in enumerate(fields):
                 identifier = field.get('identifier', j + 1)
@@ -29,3 +37,6 @@ class Writer(object):
                 lines += '\n'
             lines += '}\n' if i != last else '}'
         return lines
+
+    def _to_thrift(self, objects, indent):
+        pass

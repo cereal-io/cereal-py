@@ -8,14 +8,13 @@ from .exceptions import UnknownExtensionError
 
 def build(filepath):
     match = re.match(r'^.*\.(?P<extension>\w+)$', filepath)
-    if match is None:
-        return
     extension = match.group('extension')
     try:
-        return {
+        svc = {
             'avsc': Avro(filepath),
             'proto': Protobuf(filepath),
             'thrift': Thrift(filepath),
         }[extension]
     except KeyError:
         raise UnknownExtensionError(extension)
+    return svc

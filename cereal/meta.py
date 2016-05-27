@@ -1,6 +1,7 @@
 import json
 import os
 
+from .io.reader import Reader
 from .io.writer import Writer
 
 
@@ -18,8 +19,9 @@ class FormatMeta(object):
         # Try to load the associated regular expression patterns from
         # key based on the lowercased class name.
         patterns = patterns.get(fmt, {})
-        self._patterns = patterns
+        self._reader = Reader(fmt, patterns=patterns)
         self._writer = Writer()
+        self._patterns = patterns
 
     @property
     def patterns(self):
