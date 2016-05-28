@@ -19,8 +19,8 @@ class FormatMeta(object):
         # Try to load the associated regular expression patterns from
         # key based on the lowercased class name.
         patterns = patterns.get(fmt, {})
-        self._reader = Reader(fmt, patterns=patterns)
-        self._writer = Writer()
+        self._reader = Reader(patterns=patterns)
+        self._writer = Writer(fmt)
         self._patterns = patterns
 
     @property

@@ -1,0 +1,24 @@
+[
+    {
+        "type": "record", 
+        "name": "SearchRequest", 
+        "fields": [
+            {
+                "type": "string", 
+                "name": "query"
+            }, 
+            {
+                "type": "int", 
+                "name": "page_number"
+            }, 
+            {
+                "type": "int", 
+                "name": "result_per_page"
+            }, 
+            {
+                "type": "Corpus", 
+                "name": "corpus"
+            }
+        ]
+    }
+]

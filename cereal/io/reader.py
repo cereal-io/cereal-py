@@ -1,25 +1,17 @@
 import json
 import re
 
+from collections import namedtuple
 from collections import OrderedDict
-from ..primitives import Avro
-from ..primitives import Protobuf
-from ..primitives import Thrift
 
 
 class Reader(object):
-    def __init__(self, fmt, patterns=None):
+    def __init__(self, patterns=None):
         if patterns is None:
             patterns = {}
-        self._fmt = fmt
         self._patterns = patterns
-        self._primitives = {
-            'avro': Avro,
-            'protobuf': Protobuf,
-            'thrift': Thrift,
-        }[fmt]
 
-    def read(self, filepath, to=None):
+    def read(self, filepath):
         extension = re.match(r'^.*\.(?P<extension>\w+)$', filepath)
         extension = extension.group('extension')
         fn = {
@@ -27,38 +19,27 @@ class Reader(object):
             'proto': self._from_protobuf,
             'thrift': self._from_thrift,
         }[extension]
-        return fn(filepath, to=to.upper())
+        return fn(filepath)
 
-    def _from_avro(self, filepath, to=None):
+    def _from_avro(self, filepath):
         with open(filepath) as fp:
             records = json.loads(fp.read())
-        primitives = getattr(self._primitives, '_{to}'.format(to=to))
-        for record in records:
-            for field in record['fields']:
-                t = field['type']
-                try:
-                    t = primitives[t]
-                except KeyError:
-                    continue
-                field['type'] = t
         return records
 
-    def _from_protobuf(self, filepath, to=None):
+    def _from_protobuf(self, filepath):
         with open(filepath) as fp:
             lines = fp.readlines()
-        primitives = getattr(self._primitives, '_{to}'.format(to=to))
-        schemas = []
+        messages = []
+        enumerations = {}
         for i, line in enumerate(lines):
             line = line.strip()
             match = re.match(self._patterns['message'], line)
             if match is None:
                 continue
-            record = OrderedDict()
-            record['type'] = 'record'
+            message = OrderedDict()
             # Google Protocol Buffer message name.
-            record['name'] = match.group('name')
-            record['fields'] = []
-            enumerations = {}
+            message['name'] = match.group('name')
+            message['fields'] = []
             j = i
             while True:
                 # Increment `j` by 1 to ignore the `message` line
@@ -94,30 +75,18 @@ class Reader(object):
                     # Could not match field - continue to the next line.
                     continue
                 rule, t, identifier, _ = match.groups()
-                try:
-                    t = primitives[t]
-                    field = {
-                        'name': identifier,
-                        'type': t,
-                    }
-                except KeyError:
-                    # Search `enumerations` for type. If the enumeration
-                    # exits, then append it to the `schemas` object.
-                    try:
-                        enumeration = enumerations[t]
-                        field = enumeration
-                    except KeyError:
-                        # The enumeration type was not found, therefore,
-                        # continue parsing the remainder of the lines.
-                        continue
-                record['fields'].append(field)
-            schemas.append(record)
-        return schemas
+                field = {
+                    'rule': rule,
+                    'name': identifier,
+                    'type': t,
+                }
+                message['fields'].append(field)
+            messages.append(message)
+        return messages
 
-    def _from_thrift(self, filepath, to=None):
+    def _from_thrift(self, filepath):
         with open(filepath) as fp:
             lines = fp.readlines()
-        primitives = getattr(self._primitives, '_{to}'.format(to=to))
         messages = []
         for i, line in enumerate(lines):
             message = {}
@@ -138,10 +107,6 @@ class Reader(object):
                 if match is None:
                     continue
                 identifier, t, name = match.groups()
-                try:
-                    t = primitives[t]
-                except KeyError:
-                    continue
                 field = {
                     'identifier': int(identifier),
                     'type': t,

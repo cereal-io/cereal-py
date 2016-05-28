@@ -10,6 +10,17 @@ class Avro(object):
         'string': 'string',
     }
 
+    _THRIFT = {
+        'null': None,
+        'boolean': 'bool',
+        'int': 'i32',
+        'long': 'i64',
+        'float': 'double',
+        'double': 'double',
+        'bytes': 'binary',
+        'string': 'string',
+    }
+
 
 class Protobuf(object):
     _AVRO = {
@@ -50,6 +61,16 @@ class Protobuf(object):
 
 
 class Thrift(object):
+    _AVRO = {
+        'bool': 'bool',
+        'byte': 'int',
+        'i32': 'int',
+        'i64': 'long',
+        'double': 'double',
+        'string': 'string',
+        'binary': 'bytes',
+    }
+
     _PROTOBUF = {
         'bool': 'bool',
         'byte': 'fixed64',
