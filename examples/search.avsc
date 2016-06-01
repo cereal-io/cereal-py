@@ -1,23 +1,32 @@
 [
     {
-        "type": "record", 
-        "name": "SearchRequest", 
+        "type": "record",
+        "name": "SearchRequest",
         "fields": [
             {
-                "type": "string", 
+                "type": "string",
                 "name": "query"
-            }, 
+            },
             {
-                "type": "int", 
+                "type": "int",
                 "name": "page_number"
-            }, 
+            },
             {
-                "type": "int", 
+                "type": "int",
                 "name": "result_per_page"
-            }, 
+            },
             {
-                "type": "Corpus", 
-                "name": "corpus"
+                "type": "enum",
+                "name": "Corpus",
+                "symbols": [
+                    "UNIVERSAL",
+                    "WEB",
+                    "IMAGES",
+                    "LOCAL",
+                    "NEWS",
+                    "PRODUCTS",
+                    "VIDEO"
+                ]
             }
         ]
     }

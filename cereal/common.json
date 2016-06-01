@@ -1,0 +1,34 @@
+{
+    "avro": {
+        "primitives": [
+            "null",
+            "boolean",
+            "int",
+            "long",
+            "float",
+            "double",
+            "bytes",
+            "string"
+        ]
+    },
+    "protobuf": {
+        "primitives": [
+        ],
+        "patterns": {
+            "syntax": "syntax\\s*=\\s*\"proto(?P<syntax>\\d+)\";",
+            "message": "^message\\s(?P<name>\\w+)\\s\\{$",
+            "field": "^(?P<rule>\\w+)?(?:^|\\s)(?P<type>\\w+)(?:^|\\s)(?P<identifier>\\w+)\\s=\\s(?P<varint>\\d+);$",
+            "enumeration": "^enum\\s(?P<enumeration>\\w+)\\s\\{$"
+        }
+    },
+    "thrift": {
+        "primitives": [
+        ],
+        "patterns": {
+            "typedef": "^typedef\\s(?P<typedef>\\w+)\\s(\\w+)$",
+            "enumeration": "^enum\\s*(?P<enumeration>\\w+)\\s*\\{$",
+            "struct": "^struct\\s*(?P<struct>\\w+)\\s*\\{$",
+            "field": "^(\\d+)\\:\\s*(?P<field>\\w+)\\s*(\\w+)$"
+        }
+    }
+}

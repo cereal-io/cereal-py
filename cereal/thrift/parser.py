@@ -1,3 +1,4 @@
+from ..formats import Format
 from ..meta import FormatMeta
 
 
@@ -9,7 +10,7 @@ class Thrift(FormatMeta):
         """Convert an Apache Thrift file to an Apache Avro file."""
         messages = self._reader.read(self._filepath)
         if serialized:
-            return self._writer.write(messages, indent, to=self.AVRO)
+            return self._writer.write(messages, indent, to=Format.AVRO)
         return messages
 
     def to_protobuf(self, serialized=False, indent=4):
@@ -17,5 +18,5 @@ class Thrift(FormatMeta):
         file."""
         messages = self._reader.read(self._filepath)
         if serialized:
-            return self._writer.write(messages, indent, to=self.PROTOBUF)
+            return self._writer.write(messages, indent, to=Format.PROTOBUF)
         return messages

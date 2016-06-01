@@ -1,3 +1,4 @@
+from ..formats import Format
 from ..meta import FormatMeta
 
 
@@ -10,12 +11,12 @@ class Avro(FormatMeta):
         """
         records = self._reader.read(self._filepath)
         if serialized:
-            return self._writer.write(records, indent, to=self.PROTOBUF)
+            return self._writer.write(records, indent, to=Format.PROTOBUF)
         return records
 
     def to_thrift(self, serialized=False, indent=4):
         """Convert an Apache Avro file to an Apache Thrift file."""
         records = self._reader.read(self._filepath)
         if serialized:
-            return self._writer.write(records, indent, to=self.THRIFT)
+            return self._writer.write(records, indent, to=Format.THRIFT)
         return records
