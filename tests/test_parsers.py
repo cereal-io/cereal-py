@@ -37,8 +37,6 @@ message HelloReply {
         self.assertEqual(actual, expected)
 
     def test_to_deserialized_protobuf(self):
-        import pdb
-        pdb.set_trace()
         expected = [
             Message(name='HelloRequest', fields=[
                 Field(type_='string', name='name')
