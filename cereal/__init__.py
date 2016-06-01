@@ -11,10 +11,10 @@ def build(filepath):
     extension = match.group('extension')
     try:
         svc = {
-            'avsc': Avro(filepath),
-            'proto': Protobuf(filepath),
-            'thrift': Thrift(filepath),
+            'avsc': Avro,
+            'proto': Protobuf,
+            'thrift': Thrift,
         }[extension]
     except KeyError:
         raise UnknownExtensionError(extension)
-    return svc
+    return svc(filepath)

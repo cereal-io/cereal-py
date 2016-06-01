@@ -25,6 +25,7 @@ class Reader(object):
             'proto': self._from_protobuf,
             'thrift': self._from_thrift,
         }[extension]
+        filepath = os.path.expanduser(filepath)
         return fn(filepath)
 
     def _from_avro(self, filepath):

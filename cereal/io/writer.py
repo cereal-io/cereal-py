@@ -54,7 +54,7 @@ class Writer(object):
                     type_ = self._mappings[type_]
                 except KeyError:
                     # Primitive type could not be determined, check if
-                    # the type is an enumeration or another type.
+                    # the type is an enumeration or of another type.
                     if isinstance(fields[i], Enumeration):
                         field['type'] = fields[i].type_
                         field['name'] = fields[i].name
@@ -68,16 +68,14 @@ class Writer(object):
     def _to_protobuf(self, objects, indent, **kwargs):
         """Return serialized protocol buffers."""
         first = 0
-        last = len(objects) - 1
         lines = ''
         for i, obj in enumerate(objects):
             lines += '\n' if i != first else ''
             message = obj.name
-            lines += 'message {} {{'.format(message)
-            lines += '\n'
+            lines += 'message {} {{\n'.format(message)
             fields = obj.fields
             for j, field in enumerate(fields):
-                field.identifier = j + 1
+                field.identifier = field.identifier or j + 1
                 type_ = field.type_
                 try:
                     # If the type of the field does not exist, continue
@@ -96,8 +94,7 @@ class Writer(object):
                                 ' ' * (indent * 2) + '{} = {};\n'
                                 .format(symbol, i + 1)
                             )
-                        lines += ' ' * indent + '}'
-                        lines += '\n'
+                        lines += ' ' * indent + '}\n'
                         # Reassign the `type_` attribute to the field
                         # `name` and reassign the field `name` to be
                         # lowercased.
@@ -108,19 +105,18 @@ class Writer(object):
                     .format(field=field)
                 )
                 lines += '\n'
-            lines += '}\n' if i != last else '}'
+            lines += '}\n'
+        lines = lines.strip()
         return lines
 
     def _to_thrift(self, objects, indent):
         """Return serialized Thrift messages."""
         first = 0
-        last = len(objects) - 1
         lines = ''
         for i, obj in enumerate(objects):
             lines += '\n' if i != first else ''
             struct = obj.name
-            lines += 'struct {} {{'.format(struct)
-            lines += '\n'
+            lines += 'struct {} {{\n'.format(struct)
             fields = obj.fields
             for j, field in enumerate(fields):
                 identifier = field.identifier or j + 1
@@ -137,5 +133,6 @@ class Writer(object):
                     .format(identifier=identifier, field=field)
                 )
                 lines += '\n'
-            lines += '}\n' if i != last else '}'
+            lines += '}\n'
+        lines = lines.strip()
         return lines
