@@ -11,16 +11,11 @@ class Thrift(FormatMeta):
     def messages(self):
         return self._messages
 
-    def to_avro(self, serialized=False, indent=4):
+    def to_avro(self, indent=4):
         """Convert an Apache Thrift file to an Apache Avro file."""
-        if serialized:
-            return self._writer.write(self._messages, indent, to=Format.AVRO)
-        return self._messages
+        return self._writer.write(self._messages, indent, to=Format.AVRO)
 
-    def to_protobuf(self, serialized=False, indent=4):
+    def to_protobuf(self, indent=4):
         """Convert an Apache Thrift file to a Google Protocol Buffer
         file."""
-        if serialized:
-            return self._writer.write(self._messages, indent,
-                                      to=Format.PROTOBUF)
-        return self._messages
+        return self._writer.write(self._messages, indent, to=Format.PROTOBUF)

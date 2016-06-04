@@ -75,7 +75,9 @@ class Writer(object):
             lines += 'message {} {{\n'.format(message)
             fields = obj.fields
             for j, field in enumerate(fields):
-                field.identifier = field.identifier or j + 1
+                field.identifier = (
+                    field.identifier if hasattr(field, 'identifier') else j + 1
+                )
                 type_ = field.type_
                 try:
                     # If the type of the field does not exist, continue
