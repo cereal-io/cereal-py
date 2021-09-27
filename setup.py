@@ -13,6 +13,6 @@ setup(
     ''',
     license='MIT',
     packages=find_packages(),
-    package_data={'cereal': ['cereal/patterns.json']},
+    package_data={'cereal': ['patterns.json']},
     include_package_data=True,
 )
