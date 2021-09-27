@@ -12,5 +12,7 @@ setup(
         files to their respective counterparts.
     ''',
     license='MIT',
-    packages=find_packages()
+    packages=find_packages(),
+    package_data={'cereal': ['cereal/patterns.json']},
+    include_package_data=True,
 )
